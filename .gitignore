@@ -1,0 +1,18 @@
+# Python virtual environments and caches
+server/.venv/
+server/__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Node dependencies and build folders
+client/node_modules/
+client/dist/
+client/.env
+
+# Local environment secrets and configuration
+server/.env
+.env
+
+# System files
+.DS_Store
+Thumbs.db
