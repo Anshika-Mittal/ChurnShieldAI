@@ -121,5 +121,9 @@ export const predictAPI = {
   getBatchDetails: (batchId) => request(`/prediction/batch/${batchId}`),
   deleteBatch: (batchId) => request(`/prediction/batch/${batchId}`, { method: "DELETE" }),
   getStats: () => request("/prediction/stats"),
-  downloadResultsUrl: (batchId) => `${API_URL}/api/prediction/download-results/${batchId}`,
+  downloadResultsUrl: (batchId) => {
+    const token = localStorage.getItem("auth_token") || "";
+    const qs = token ? `?token=${encodeURIComponent(token)}` : "";
+    return `${API_URL}/api/prediction/download-results/${batchId}${qs}`;
+  },
 };

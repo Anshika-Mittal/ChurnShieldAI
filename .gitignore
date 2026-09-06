@@ -1,18 +1,39 @@
 # Python virtual environments and caches
-server/.venv/
-server/__pycache__/
+ml-service/.venv/
+ml-service/__pycache__/
 *.pyc
 .ipynb_checkpoints/
 
-# Node dependencies and build folders
+# Node
 client/node_modules/
 client/dist/
-client/.env
+backend/node_modules/
+backend/uploads/avatars/*
+!backend/uploads/avatars/.gitkeep
 
-# Local environment secrets and configuration
-server/.env
+# Local environment secrets
+client/.env
+backend/.env
 .env
+.env.*
+!.env.example
 
 # System files
 .DS_Store
 Thumbs.db
+
+.venv/
+venv/
+ml-service/.venv/
+
+__pycache__/
+
+*.log
+logs/
+
+client/dist/
+dist/
+build/
+
+.vscode/
+.idea/
