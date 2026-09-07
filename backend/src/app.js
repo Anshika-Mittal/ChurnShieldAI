@@ -29,7 +29,10 @@ app.use(
 // CORS Configuration
 app.use(
   cors({
-    origin: config.CORS_ORIGIN === "*" ? true : config.CORS_ORIGIN.split(","),
+    origin: [
+    "https://churn-shield-ai-client.vercel.app",
+  "http://localhost:5173"
+  ],
     credentials: true,
   })
 );
