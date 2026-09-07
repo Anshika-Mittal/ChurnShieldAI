@@ -1,8 +1,8 @@
 # ChurnShield AI - Explainable Customer Churn Prediction
 
-ChurnShield AI is a full-stack churn prediction app: a React client, a **Node.js + Express** API, and a **Python ML microservice** that runs the pre-trained logistic regression model and SHAP explanations.
+ChurnShield AI is a full-stack churn prediction app: a React client, a **Node.js + Express** API, and a **Python ML microservice** that runs the pre-trained linear regression model and SHAP explanations.
 
-The old Flask application server (`server/`) has been removed. Python remains only for model inference (`ml-service/`). Node.js owns auth, MongoDB, batch jobs, email, and S3.
+Node.js owns auth, MongoDB, batch jobs, email and S3.
 
 ---
 
@@ -28,12 +28,11 @@ customer-churn/
 ├── ml-service/      Python inference + SHAP
 ├── model/           Training notebook and model artifacts
 ├── customer_churn.csv
-└── docker-compose.yml
 ```
 
 ---
 
-## What you must do manually
+## To run this project:
 
 ### 1. Copy environment files
 
@@ -49,7 +48,7 @@ cp client/.env.example client/.env
 | `SECRET_KEY` | Yes for production | Random string used to sign login captchas |
 | `JWT_SECRET_KEY` | Yes for production | Random string used to sign session JWTs |
 | `MONGO_URI` | Yes unless `DEMO_MODE=true` | Local `mongodb://localhost:27017/churn_db` or an Atlas URI |
-| `ML_SERVICE_URL` | Yes | `http://localhost:5001` locally, or the ML service URL in Docker/cloud |
+| `ML_SERVICE_URL` | Yes | `http://localhost:5001` locally, or the ML service URL in Cloud |
 | `CORS_ORIGIN` | Yes in production | Your frontend origin(s), comma-separated. Example: `https://your-app.vercel.app` |
 | `PUBLIC_BASE_URL` | If you skip S3 | Public URL of the API, used for local avatar files |
 | `GOOGLE_CLIENT_ID` | For real Google login | Same **Web client ID** as in `client/.env` |
@@ -80,21 +79,19 @@ The ML service loads:
 
 If the pickle is missing, copy it from your training output (`model/` after running the notebook) into `ml-service/model/churn_model.pickle`. Predictions will not start without it.
 
-### 5. Install MongoDB (or skip with demo / Docker)
+### 5. Install MongoDB
 
 - Local: [MongoDB Community](https://www.mongodb.com/try/download/community) on port 27017, **or**
-- Atlas connection string in `MONGO_URI`, **or**
-- `docker compose up mongodb`, **or**
-- `DEMO_MODE=true` (non-persistent)
+- Atlas connection string in `MONGO_URI`
 
-### 6. Google Cloud (optional)
+### 6. Google Cloud
 
 1. Create an OAuth client of type **Web application**.
 2. Authorized JavaScript origins: `http://localhost:5173` and your production frontend URL.
 3. Authorized redirect URIs: same origins (GIS button login does not need a redirect path).
 4. Paste the client ID into **both** `client/.env` (`VITE_GOOGLE_CLIENT_ID`) and `backend/.env` (`GOOGLE_CLIENT_ID`).
 
-### 7. AWS S3 (optional)
+### 7. AWS S3
 
 1. Create a bucket.
 2. Create an IAM user with put/delete on `avatars/*`.
@@ -105,7 +102,7 @@ If the pickle is missing, copy it from your training output (`model/` after runn
 
 ## Local development
 
-Prerequisites: **Node.js 18+**, **Python 3.9+**, **MongoDB** (or `DEMO_MODE=true`).
+Prerequisites: **Node.js 18+**, **Python 3.9+**, **MongoDB**.
 
 ### ML service (required for predictions)
 
@@ -144,14 +141,6 @@ Opens `http://localhost:5173`.
 
 ---
 
-## Docker Compose (all services)
-
-```bash
-cp backend/.env.example backend/.env
-# edit JWT secrets, SMTP, AWS, Google as needed
-docker compose up --build
-```
-
 - Client: http://localhost:5173  
 - API: http://localhost:5000  
 - ML: http://localhost:5001  
@@ -171,8 +160,6 @@ The API does not serve the React app; the frontend is a separate static site.
 
 Health check path for the API: `/api/health`.  
 Health check path for ML: `/health`.
-
-Do not commit `.env` files. Rotate `SECRET_KEY` and `JWT_SECRET_KEY` if they ever leaked.
 
 ---
 
